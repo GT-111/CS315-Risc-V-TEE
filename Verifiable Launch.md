@@ -14,7 +14,7 @@ We call an EE that implements trustworthy execution a TEE.
 
 
 
-A Keystone root-of-trust can be either tamperproof software (e.g., a zeroth-order bootloader) or hardware (e.g., crypto engine). At each CPU reset the root-of-trust measures the SM image, generates a fresh attestation key from a cryptographically secure source of randomness, and stores it to the SM private memory. e root-of-trust then signs the measurement and the public key with a hardware-visible secret. ese are standard operations, can be implemented in numerous ways.
+A Keystone root-of-trust can be either tamperproof software (e.g., a zeroth-order bootloader) or hardware (e.g., crypto engine). At each CPU reset the root-of-trust measures the SM image, generates a fresh attestation key from a cryptographically secure source of randomness, and stores it to the SM private memory. the root-of-trust then signs the measurement and the public key with a hardware-visible secret. these are standard operations, can be implemented in numerous ways.
 
 
 
