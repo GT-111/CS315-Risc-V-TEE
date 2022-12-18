@@ -20,6 +20,8 @@ Timber-V将memory在User mode和Supervisor mode这一划分的基础上进一步
 
 Penglai使用ownership bitmap来标记每一个物理页的状态。其中monitor和enclave的secure的，untrusted OS和apps是不安全的。理论上在不受信任的应用访问内存的时候要依靠security monitor这个安全软件来check这个ownership bitmap，以判断能否取访问。而为了保护这个bitmap的安全性，则本身使用了PMP这个硬件原语来保护。但是仅仅使用ownership bitmap效率会比较低，因为他访问同一个地址需要访问两次内存。 penglai的聪明之处在于它将这个check给移到了address mapping 的阶段。在内存中专门使用PMP物理保护了一个Host page table area，这个区域专门用于放untrusted OS和user app这样unsecure的进程的page table。通过修改page table walker的方式，在这个区域中的所有page table都不会包含对于secure memory page的mapping。这样一来在物理地址mapping的时候就避免了不受信任的应用访问到安全的内存。
 
+Sanctum 引⼊了⼀种简单的软件/硬件协同设计，它具有与SGX相同的抵御软件攻击的能⼒，并增加了针对内存访问模式泄漏的保护，例如页⾯错误监视攻击和缓存定时攻击。Sanctum使⽤概念上简单的缓存分区⽅案，该⽅案将计算机的DRAM分为相等⼤⼩的连续DRAM区域，并且每个DRAM区域在共享的末级缓存（LLC）中使⽤不同的集合，每个DRAM区域恰好分配给⼀个容器，因此容器在DRAM和LLC中都是隔离的。通过在上下⽂开关上进⾏刷新，可以将容器隔离在其他缓存中。像XOM，Aegis和Bastion⼀样，Sanctum还认为虚拟机管理程序，OS和应⽤程序软件在概念上属于⼀个单独的容器，通过使容器彼此隔离的相同措施，可以保护容器免受不受信任的外部软件的侵害。Sanctum依赖于受信任的安全监视器，该监视器是处理器执⾏的第⼀部分固件，并且具有与Aegis安全内核相同的安全属性。该监视器通过处理器ROM中的引导程序代码进⾏度量，并且其加密哈希包含在软件证明度量中。监视器验证操作系统的资源分配决策，例如，它确保两个不同的容器都⽆法访问DRAM区域。每个Sanctum容器管理映射其DRAM区域的⾃⼰的页表，并处理⾃⼰的页错误，因此，恶意操作系统⽆法学习会导致容器中出现页⾯错误的虚拟地址。Sanctum的硬件修改与安全监视器配合使⽤，以确保容器的页表仅引⽤容器DRAM区域内的内存。Sanctum的设计完全专注于软件攻击，不能提供任何物理攻击的保护。作者希望Sanctum的硬件修改能够与Aegis或Ascend中的物理攻击保护结合在⼀起。
+
 
 
 ### Hardware Changes
