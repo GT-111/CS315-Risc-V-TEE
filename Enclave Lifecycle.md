@@ -2,11 +2,11 @@
 
 ## Enclave Creation&Execution
 
-​	keystone: During enclave creation, Keystone measures the enclave memory to ensure that the OS has loaded the enclave binaries correctly to the physical memory. Keystone uses the initial virtual memory layout for measurement as the physical layout can legitimately vary (within limits) across different executions. Specifically, the SM expects the OS to initialize the enclave page tables and allocate physical memory for the enclave. During the enclave creation, the SM uses the initial page table provided by the OS and SM checks if there are invalid mappings, ensures unique virtual to physical mapping. en the SM hashes page content along with virtual addresses and conguration data. For execution, the SM sets the PMP entries and transfers control to the enclave entry point.
+​	keystone: During enclave creation, Keystone measures the enclave memory to ensure that the OS has loaded the enclave binaries correctly to the physical memory. Keystone uses the initial virtual memory layout for measurement as the physical layout can legitimately vary (within limits) across different executions. Specifically, the SM expects the OS to initialize the enclave page tables and allocate physical memory for the enclave. During the enclave creation, the SM uses the initial page table provided by the OS, and SM checks if there are invalid mappings, ensuring unique virtual to physical mapping. Then the SM hashes page content along with virtual addresses and configuration data. For execution, the SM sets the PMP entries and transfers control to the enclave entry point.
 
 ​	
 
-sanctum:	The OS creates an enclave by issuing a create enclave call that creates the enclave metadata structure, which is Sanctum’s equivalent of the SECS. The enclave metadata structure contains an array of mailboxes whose size is established at enclave creation time, so the number of pages required by the structure varies from enclave to enclave. 
+sanctum:	The OS creates an enclave by issuing a create enclave call that creates the enclave meta-data structure, which is Sanctum’s equivalent of the SECS. The enclave meta-data structure contains an array of mailboxes whose size is established at enclave creation time, so the number of pages required by the structure varies from enclave to enclave. 
 
 ## Enclave Destruction
 
